@@ -5,6 +5,8 @@
 ![IDE](https://img.shields.io/badge/IDE-STM32CubeIDE-03234B)
 ![Language](https://img.shields.io/badge/Language-C-555555?logo=c)
 
+<a id="english"></a>**🇬🇧 English** · [🇻🇳 Tiếng Việt](#tieng-viet)
+
 Weight measurement with a **load cell + HX711 24-bit ADC** on an **STM32F103C8T6**, plus a pulse-counting **RPM meter**. Useful as a thrust/torque test bench for motors and propellers.
 
 ---
@@ -45,6 +47,39 @@ float    knownHX711    = 30108;   // (raw − tare) measured with the reference 
 1. Open the `HX711` folder in **STM32CubeIDE** (*File → Import → Existing Projects into Workspace*).
 2. Build and flash with an ST-Link.
 3. Watch the `weight` (mg) and `rpm` variables in **Live Expressions** while debugging.
+
+---
+
+<a id="tieng-viet"></a>
+
+## 🇻🇳 Tiếng Việt
+
+[🇬🇧 English](#english) · **🇻🇳 Tiếng Việt**
+
+Đo khối lượng bằng **loadcell + ADC 24-bit HX711** trên **STM32F103C8T6**, kèm bộ **đo tốc độ quay (RPM)** bằng cách đếm xung. Có thể dùng làm bàn đo lực đẩy hoặc mô-men cho động cơ và cánh quạt.
+
+### ✨ Tính năng
+
+- **Driver HX711 bit-bang:** đọc 24-bit với thời gian µs lấy từ TIM2, có timeout 200 ms nếu cảm biến chưa sẵn sàng.
+- **Lấy trung bình:** mỗi lần đo là trung bình của 50 mẫu để giảm nhiễu.
+- **Hiệu chuẩn 2 điểm:** trừ bì (tare) và nhân hệ số tỉ lệ từ một vật mẫu đã biết khối lượng. Kết quả tính bằng **miligam**.
+- **Đo RPM:** đếm xung trên PA0 (ngắt EXTI), TIM3 quy đổi mỗi giây: `RPM = số xung/giây × 60`.
+
+Bảng nối chân: xem phần tiếng Anh ở trên.
+
+### ⚙️ Hiệu chuẩn
+
+Các hằng số nằm trong `HX711/Core/Src/main.c`:
+
+1. Đọc giá trị thô khi không tải và gán vào `tare`.
+2. Đặt vật mẫu, đọc `(raw − tare)` và gán vào `knownHX711`. Gán khối lượng vật mẫu (mg) vào `knownOriginal`.
+3. `weight = (average − tare) × knownOriginal / knownHX711` (mg).
+
+### 🚀 Hướng dẫn sử dụng
+
+1. Mở thư mục `HX711` bằng **STM32CubeIDE**.
+2. Build và nạp bằng ST-Link.
+3. Theo dõi biến `weight` (mg) và `rpm` trong **Live Expressions** khi debug.
 
 ---
 
